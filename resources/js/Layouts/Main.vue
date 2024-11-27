@@ -36,11 +36,15 @@ const show = ref(false);
                     <div
                         v-show="show"
                         @click="show = false"
-                        class="absolute z-50 top-16 right-0 bg-slate-800 text-white rounded-lg border-slate-300 border overflow-hidden w-40"
+                        class="absolute z-50 top-16 right-0 bg-slate-800 text-white rounded-lg border-slate-300 border overflow-hidden w-52"
                     >
                         <Link
                             :href="route('profile.edit')" class="block w-full px-6 py-3 hover:bg-slate-700 text-left"
                             >Profil</Link
+                        >
+                        <Link
+                            :href="route('listing.create')" class="block w-full px-6 py-3 hover:bg-slate-700 text-left"
+                            >Nouvelle Liste</Link
                         >
                         <Link
                             :href="route('dashboard')" class="block w-full px-6 py-3 hover:bg-slate-700 text-left"
