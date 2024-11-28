@@ -3,7 +3,7 @@ import "../css/app.css";
 
 import { createApp, h } from "vue";
 import { createInertiaApp, Head, Link } from "@inertiajs/vue3";
-import { ZiggyVue } from "../../vendor/tightenco/ziggy";
+import { ZiggyVue } from "ziggy";
 
 import Main from "./Layouts/Main.vue";
 import { setThemeOnLoad } from "./theme"
