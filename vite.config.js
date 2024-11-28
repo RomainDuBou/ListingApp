@@ -9,5 +9,10 @@ export default defineConfig({
             input: ['resources/js/app.js'],
             refresh: true,
         }),
-    ]
+    ],
+    resolve: {
+        alias: {
+            ziggy: '/vendor/tightenco/ziggy/dist/vue', // Corrige l'importation de Ziggy pour Vue.js
+        },
+    },
 });
