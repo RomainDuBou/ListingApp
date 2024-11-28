@@ -11,8 +11,8 @@ export default defineConfig({
         }),
     ],
     server: {
-        host: '0.0.0.0', // écoute sur toutes les interfaces
-        port: process.env.PORT || 5173, // utiliser le port fourni par Render ou 5173 par défaut en local
-        strictPort: true, // échouer si le port est déjà pris
+        host: '0.0.0.0', // écoute sur toutes les interfaces réseau
+        port: process.env.PORT ? parseInt(process.env.PORT) : 5173, // Utiliser le port fourni par Render ou 5173 par défaut
+        strictPort: true, // Si le port n'est pas disponible, arrêter
     },
 });
