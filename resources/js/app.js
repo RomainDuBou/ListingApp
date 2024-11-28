@@ -3,8 +3,7 @@ import "../css/app.css";
 
 import { createApp, h } from "vue";
 import { createInertiaApp, Head, Link } from "@inertiajs/vue3";
-import { ZiggyVue } from "ziggy";
-
+import { ZiggyVue } from "../../vendor/tightenco/ziggy";
 import Main from "./Layouts/Main.vue";
 import { setThemeOnLoad } from "./theme"
 
@@ -20,7 +19,7 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
             .use(plugin)
-            .use(ZiggyVue)
+            .use(ZiggyVue )
             .component("Head", Head)
             .component("Link", Link)
             .mount(el);
