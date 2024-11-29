@@ -1,9 +1,14 @@
 import { exec } from 'child_process';
 
-const port = process.env.PORT || 10000; // Utilise la variable PORT de l'environnement ou 10000 par défaut
-const command = `npx serve -s dist -l ${port}`;
+let port = process.env.PORT;
 
-console.log(`Lancement du serveur sur le port : ${port}`);
+if (!port) {
+  console.error("La variable d'environnement PORT n'est pas définie par Render.");
+  process.exit(1);
+}
+
+console.log(`Valeur actuelle de PORT : ${port}`);
+const command = `npx serve -s dist -l ${port}`;
 
 exec(command, (err, stdout, stderr) => {
   if (err) {
