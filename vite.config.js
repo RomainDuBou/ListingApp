@@ -15,4 +15,7 @@ export default defineConfig({
         port: process.env.PORT ? parseInt(process.env.PORT) : 5173, // Utiliser le port fourni par Render ou 5173 par défaut
         strictPort: true, // Si le port n'est pas disponible, arrêter
     },
+    build: {
+        outDir: 'dist', // Assurez-vous que le dossier de sortie est bien 'dist'
+    },
 });
