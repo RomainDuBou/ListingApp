@@ -16,6 +16,11 @@ export default defineConfig({
         strictPort: true, // Si le port n'est pas disponible, arrêter
     },
     build: {
-        outDir: 'dist', // Assurez-vous que le dossier de sortie est bien 'dist'
+        outDir: 'dist', // Assurez-vous que le build est généré dans le dossier dist
+        rollupOptions: {
+            input: {
+                main: 'resources/views/index.html', // Assurez-vous que ce chemin est correct
+            },
+        },
     },
 });
