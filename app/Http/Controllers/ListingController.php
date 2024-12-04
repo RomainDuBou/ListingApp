@@ -2,15 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UpdateListingRequest;
+use App\Http\Middleware\NotSuspended;
 use App\Models\Listing;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
-class ListingController extends Controller
+class ListingController extends Controller implements HasMiddleware
 {
+
+    public static function middleware()
+    {
+        return [
+            new Middleware(['auth', 'verified', NotSuspended::class], 
+            except: ['index', 'show'])
+        ];
+    }
     /**
      * Display a listing of the resource.
      */
@@ -74,7 +85,13 @@ class ListingController extends Controller
      */
     public function show(Listing $listing)
     {
-        //
+
+        Gate::authorize('view', $listing);
+        
+        return Inertia::render('Listing/Show', [
+            'listing' => $listing,
+            'user' => $listing->user->only(['name', 'id'])
+        ]);
     }
 
     /**
@@ -82,15 +99,44 @@ class ListingController extends Controller
      */
     public function edit(Listing $listing)
     {
-        //
+        return Inertia::render('Listing/Edit', [
+            'listing' => $listing
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateListingRequest $request, Listing $listing)
+    public function update(Request $request, Listing $listing)
     {
-        //
+        $fields = $request->validate([
+            'title' => ['required', 'max:255'],
+            'desc' => ['required'],
+            'tags' => ['nullable', 'string'],
+            'email' => ['nullable', 'email'],
+            'link' => ['nullable', 'url'],
+            'image' => ['nullable', 'file', 'max:3072', 'mimes:jpeg,jpg,png,webp'],
+        ], [
+            'title.required' => 'Veuillez entrer un titre à votre liste',
+            'desc.required' => 'La description de votre liste est obligatoire',
+            'link.url' => 'Votre lien est invalide.'
+        ]);
+
+        if ($request->hasFile('image')) {
+
+            if ($listing->image) {
+                Storage::disk('public')->delete($listing->image);
+            }
+            $fields['image'] = Storage::disk('public')->put('images/listing', $request->image);
+        } else {
+            $fields['image'] = $listing->image;
+        }
+
+        $fields['tags'] = implode(',', array_unique(array_filter(array_map('trim', explode(',', $request->tags)))));
+
+        $listing->update($fields);
+
+        return redirect()->route('dashboard')->with('status', 'Liste mis à jour avec succès');
     }
 
     /**
@@ -98,6 +144,12 @@ class ListingController extends Controller
      */
     public function destroy(Listing $listing)
     {
-        //
+        if ($listing->image) {
+            Storage::disk('public')->delete($listing->image);
+        }
+
+        $listing->delete();
+
+        return redirect()->route('dashboard')->with('status', 'Liste supprimée avec succès');
     }
 }

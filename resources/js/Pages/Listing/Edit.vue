@@ -8,28 +8,32 @@ import TextArea from "../../Components/TextArea.vue";
 import ImageUpload from "../../Components/ImageUpload.vue";
 import { useForm } from "@inertiajs/vue3";
 
+const props = defineProps({ listing: Object });
+
+
 const form = useForm({
-    title: null,
-    desc: null,
-    tags: null,
-    email: null,
-    link: null,
+    title: props.listing.title,
+    desc: props.listing.desc,
+    tags: props.listing.tags,
+    email: props.listing.email,
+    link: props.listing.link,
     image: null,
+    _method: 'PUT'
 });
 </script>
 
 <template>
-    <Head title="- Nouvelle Liste" />
+    <Head title="- Modification Liste" />
 
     <Container>
         <div>
-            <Title>Créer une nouvelle liste</Title>
+            <Title>Modifier votre liste</Title>
         </div>
 
         <ErrorMessages :errors="form.errors" />
 
         <form
-            @submit.prevent="form.post(route('listing.store'))"
+          @submit.prevent="form.post(route('listing.update', listing.id))"
             class="grid grid-cols-2 gap-6"
         >
             <div class="space-y-6">
@@ -68,11 +72,11 @@ const form = useForm({
                     v-model="form.link"
                 />
 
-                <ImageUpload @image="(e) => (form.image = e)" />
+                <ImageUpload @image="(e) => (form.image = e)" :listingImage="listing.image" />
             </div>
 
             <div>
-                <PrimaryBtn :disabled="form.processing">Créer</PrimaryBtn>
+                <PrimaryBtn :disabled="form.processing">Modifer</PrimaryBtn>
             </div>
         </form>
     </Container>
