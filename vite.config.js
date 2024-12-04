@@ -12,7 +12,7 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            'ziggy-js': require.resolve('ziggy-js'),
+            'ziggy-js': path.resolve(__dirname, 'node_modules/ziggy-js'),
         },
     },
 });
